@@ -1,0 +1,8 @@
+# cat=Gravatar fallback; type=options[Transparent/blank=, mystery-man=mm, identicon=identicon, monsterid=monsterid, wavatar=wavatar, retro=retro, Use fallback image=url]; label=Fallback behaviour: see https://www.gravatar.com/site/implement/images/
+fallback =
+
+# cat=Gravatar fallback; type=string; label=Fallback image url: MUST be publicly available, see https://www.gravatar.com/site/implement/images/
+fallbackImageUrl =
+
+# cat=Gravatar fallback; type=boolean; label=Use Gravatar service even if email address is empty: Normally the Gravatar service is only requested when a email address is set. With this setting you can also enable is for BE users without email address. The above fallback will always be used then.
+alwaysUseGravatarService =
