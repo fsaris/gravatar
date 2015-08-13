@@ -70,10 +70,12 @@ class GravatarProvider implements AvatarProviderInterface {
 		$size = min(2048, $size);
 		$gravatarUrl = 'https://www.gravatar.com/avatar/' . md5(strtolower($backendUser['email'] ?: $backendUser['username'])) . '?s=' . $size . '&d=' . urlencode($fallback);
 
-		$image = GeneralUtility::makeInstance(Image::class);
-		$image->setUrl($gravatarUrl);
-		$image->setWidth($size);
-		$image->setHeight($size);
+		$image = GeneralUtility::makeInstance(
+			Image::class,
+			$gravatarUrl,
+			$size,
+			$size
+		);
 
 		return $image;
 	}
