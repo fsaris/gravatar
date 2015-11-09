@@ -25,7 +25,7 @@ class GravatarProvider implements AvatarProviderInterface {
 	/**
 	 * @var array
 	 */
-	static protected $defaultConfiguration = ['fallback' => '', 'fallbackImageUrl' => '', 'alwaysUseGravatarService' => FALSE];
+	static protected $defaultConfiguration = ['fallback' => '', 'fallbackImageUrl' => '', 'forceProvider' => FALSE];
 
 	/**
 	 * @var array
@@ -58,7 +58,7 @@ class GravatarProvider implements AvatarProviderInterface {
 	public function getImage(array $backendUser, $size) {
 		$image = NULL;
 		$configuration = self::getConfiguration();
-		if (empty($backendUser['email']) && empty($configuration['alwaysUseGravatarService'])) {
+		if (empty($backendUser['email']) && empty($configuration['forceProvider'])) {
 			return $image;
 		}
 
