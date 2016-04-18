@@ -1,5 +1,5 @@
 # cat=Gravatar fallback; type=options[Transparent/blank=, mystery-man=mm, identicon=identicon, monsterid=monsterid, wavatar=wavatar, retro=retro, Use fallback image=url]; label=Fallback behaviour: see https://www.gravatar.com/site/implement/images/
-fallback =
+fallback = retro
 
 # cat=Gravatar fallback; type=string; label=Fallback image url: MUST be publicly available, see https://www.gravatar.com/site/implement/images/
 fallbackImageUrl =
