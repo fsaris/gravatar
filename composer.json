@@ -1,7 +1,7 @@
 {
 	"name": "minifranske/gravatar",
 	"type": "typo3-cms-extension",
-	"description": "AvatarProvider for Gravatar support in backend",
+	"description": "AvatarProvider for Gravatar support in TYPO3 backend",
 	"license": ["GPL-2.0+"],
 	"require": {
 		"typo3/cms-core": ">=7.5.0,<=8.1"
