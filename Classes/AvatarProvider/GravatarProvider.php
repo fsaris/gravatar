@@ -15,6 +15,7 @@ namespace MiniFranske\Gravatar\AvatarProvider;
  */
 use TYPO3\CMS\Backend\Backend\Avatar\Image;
 use TYPO3\CMS\Backend\Backend\Avatar\AvatarProviderInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -72,11 +73,19 @@ class GravatarProvider implements AvatarProviderInterface
         }
 
         $size = min(2048, $size);
-        $gravatarUrl = 'https://www.gravatar.com/avatar/' . md5(strtolower($backendUser['email'] ?: $backendUser['username'])) . '?s=' . $size . '&d=' . urlencode($fallback);
+        $md5 = md5(strtolower($backendUser['email'] ?: $backendUser['username']));
+
+        if (!empty($configuration['useProxy'])) {
+            // change to proxy url
+            $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+            $uri = (string)$uriBuilder->buildUriFromRoute('gravatar', ['md5' => $md5, 'size' => $size, 'd' => $fallback]);
+        } else {
+            $uri = 'https://www.gravatar.com/avatar/' . $md5 . '?s=' . $size . '&d=' . urlencode($fallback);
+        }
 
         $image = GeneralUtility::makeInstance(
             Image::class,
-            $gravatarUrl,
+            $uri,
             $size,
             $size
         );

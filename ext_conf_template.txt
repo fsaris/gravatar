@@ -6,3 +6,6 @@ fallbackImageUrl =
 
 # cat=Gravatar fallback; type=boolean; label=Use Gravatar service even if email address is empty: Normally the Gravatar service is only requested when a email address is set. With this setting you can also enable is for BE users without email address. The above fallback will always be used then.
 forceProvider =
+
+# cat=Gravatar Privacy; type=boolean; label=Improve privacy by proxying the image request
+useProxy =
