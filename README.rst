@@ -14,11 +14,11 @@ Gravatar is a free service for site owners, developers, and users. For more info
 
 **QuickStart:**
 
-Install extension and that's it. Gravatar support is enabled for BE users with a email address set and no avatar image.
+Install extension and that's it. Gravatar support is enabled for BE users with an email address set and no avatar image.
 
 By default Gravatar is only used when a user hasn't an avatar image linked to his account an email address set.
 But optional the email address check can be disabled so also BE users without email address set can get a
-generated images provided by Gravatar.
+generated image provided by Gravatar.
 
 
 **How to use:**
@@ -28,7 +28,7 @@ generated images provided by Gravatar.
 
 2. *Optional (by default the Gravatar service is now enabled and will be used for BE users without avatar image and with email address set):*
 
-   Set a fallback behaviour thought extensions configuration (see extension manager)
+   Set a fallback behaviour through extensions configuration (see extension manager)
 
 
 **Features:**
@@ -43,6 +43,10 @@ generated images provided by Gravatar.
   - **blank:** a transparent PNG image
 
 - Can also be used to show generated Gravatar image for BE users without email address
+
+- Proxy for Gravatar images: Instead of generating images which point to Gravatars-servers, use a proxy.
+This improves privacy a bit, because your users will not request the images directly from Gravatar. **Note**: Gravatar will still receive the hashed email addresses.
+This feature is disabled by default and can be enabled in extension configuration with `privacy.useProxy`.
 
 
 **Requirements:**
