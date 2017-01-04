@@ -1,15 +1,35 @@
 <?php
-
 namespace MiniFranske\Gravatar\Controller;
 
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+use GuzzleHttp\Client;
 use TYPO3\CMS\Core\Http\Request;
 use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Http\Stream;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
+/**
+ * Class ProxyController
+ */
 class ProxyController
 {
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return \TYPO3\CMS\Core\Http\Message|Response
+     * @throws \Exception
+     */
     public function proxyAction(Request $request, Response $response)
     {
         $params = $request->getQueryParams();
@@ -18,23 +38,25 @@ class ProxyController
             throw new \Exception('Missing gravatar parameters', 1470912686);
         }
 
-        $md5 = $params['md5'];
-        $size = $params['size'];
-        $d = $params['d'];
-        $uri = 'https://www.gravatar.com/avatar/' . $md5 . '?s=' . $size . '&d=' . urlencode($d);
+        $uri = '/avatar/'
+            . urlencode($params['md5'])
+            . '?s=' . urlencode($params['size'])
+            . '&d=' . urlencode($params['d']);
 
-        $headers = [];
+        $client = new Client(['base_uri' => 'https://www.gravatar.com']);
+
+        $options = [];
         if ($request->getHeaderLine('If-Modified-Since')) {
-            $headers[] = 'If-Modified-Since: ' . $request->getHeaderLine('If-Modified-Since');
+            $options['headers']['If-Modified-Since'] = $request->getHeaderLine('If-Modified-Since');
         }
 
-        $report = false;
         // request image from gravatar
-        $result = GeneralUtility::getUrl($uri, 1, $headers, $report);
-        // Header and content are separated by an empty line
-        list($header, $body) = explode(CRLF . CRLF, $result, 2);
+        $result = $client->get(
+            $uri,
+            $options
+        );
 
-        if ($report['http_code'] == 304) {
+        if ($result->getStatusCode() === 304) {
             $response = $response->withStatus(304, 'Not Modified');
         }
 
@@ -46,23 +68,17 @@ class ProxyController
             'expires',
             'last-modified',
         ];
-        $headerArr = preg_split('/\\r|\\n/', $header, -1, PREG_SPLIT_NO_EMPTY);
-        foreach ($headerArr as $header) {
-            foreach ($passHeaders as $h) {
-                if (preg_match('/^' . $h . ':/i', $header)) {
-                    list($headerName, $headerValue) = explode(':', $header, 2);
-                    $response = $response->withAddedHeader($headerName, $headerValue);
-                }
+
+        foreach ($passHeaders as $headerName) {
+            $headerValue = $result->getHeader($headerName);
+            if ($headerValue !== []) {
+                $response = $response->withAddedHeader($headerName, $headerValue);
             }
         }
 
+        $body = $result->getBody();
         if ($body) {
-            // response needs a stream instead of a string
-            $bodyStream = fopen('php://memory','r+');
-            fwrite($bodyStream, $body);
-            rewind($bodyStream);
-            $bodyStream = new Stream($bodyStream);
-            $response = $response->withBody($bodyStream);
+            $response = $response->withBody($body);
         }
 
         return $response;
