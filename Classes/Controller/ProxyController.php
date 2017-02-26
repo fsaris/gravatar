@@ -17,12 +17,20 @@ namespace MiniFranske\Gravatar\Controller;
 use GuzzleHttp\Client;
 use TYPO3\CMS\Core\Http\Request;
 use TYPO3\CMS\Core\Http\Response;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Class ProxyController
  */
 class ProxyController
 {
+    public function __construct()
+    {
+        // Autoload GuzzleClient when not present
+        if (!class_exists(Client::class)) {
+            include 'phar://' . ExtensionManagementUtility::extPath('gravatar') . 'Libraries/guzzle.phar/autoloader.php';
+        }
+    }
 
     /**
      * @param Request $request
