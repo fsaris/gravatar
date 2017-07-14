@@ -78,7 +78,7 @@ class GravatarProvider implements AvatarProviderInterface
         if (!empty($configuration['useProxy'])) {
             // change to proxy url
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $uri = (string)$uriBuilder->buildUriFromRoute('gravatar', ['md5' => $md5, 'size' => $size, 'd' => $fallback]);
+            $uri = (string)$uriBuilder->buildUriFromRoute('gravatar', ['md5' => $md5, 'size' => $size, 'd' => $fallback], UriBuilder::ABSOLUTE_URL);
         } else {
             $uri = 'https://www.gravatar.com/avatar/' . $md5 . '?s=' . $size . '&d=' . urlencode($fallback);
         }
