@@ -9,7 +9,7 @@ online, a little picture that appears next to your name on various places in the
 **What is Gravatar?**
 
 A Gravatar is a Globally Recognized Avatar. You upload it and create your profile just once, and then when you participate in any Gravatar-enabled site, your Gravatar image will automatically follow you there.
-Gravatar is a free service for site owners, developers, and users. For more info visit: https://nl.gravatar.com.
+Gravatar is a free service for site owners, developers, and users. For more info visit: https://gravatar.com.
 
 
 **QuickStart:**
