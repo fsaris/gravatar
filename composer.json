@@ -2,18 +2,21 @@
 	"name": "minifranske/gravatar",
 	"type": "typo3-cms-extension",
 	"description": "AvatarProvider for Gravatar support in TYPO3 backend",
-	"license": ["GPL-2.0+"],
+	"license": "GPL-2.0-or-later",
 	"require": {
-		"typo3/cms-core": "^7.5.0 || ^8.0 || ^9.5",
-		"guzzlehttp/guzzle": "^6.0"
+		"typo3/cms-core": "^10"
 	},
 	"replace": {
-		"gravatar": "self.version",
 		"typo3-ter/gravatar": "self.version"
 	},
 	"autoload": {
 		"psr-4": {
 			"MiniFranske\\Gravatar\\": "Classes/"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "gravatar"
 		}
 	}
 }

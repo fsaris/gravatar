@@ -50,4 +50,6 @@ This feature is disabled by default and can be enabled in extension configuratio
 
 
 **Requirements:**
-    TYPO3 >= 7.5
+    For TYPO3 >=7.5,=<9.5 use version ^1 ``composer require minifranske/gravatar:^1``
+
+    TYPO3 >=10 use version ^2 ``composer require minifranske/gravatar``

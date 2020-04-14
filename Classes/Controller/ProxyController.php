@@ -1,4 +1,5 @@
 <?php
+
 namespace MiniFranske\Gravatar\Controller;
 
 /*
@@ -15,30 +16,20 @@ namespace MiniFranske\Gravatar\Controller;
  */
 
 use GuzzleHttp\Client;
-use TYPO3\CMS\Core\Http\Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use TYPO3\CMS\Core\Http\Response;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Class ProxyController
  */
 class ProxyController
 {
-    public function __construct()
-    {
-        // Autoload GuzzleClient when not present
-        if (!class_exists(Client::class)) {
-            include 'phar://' . ExtensionManagementUtility::extPath('gravatar') . 'Libraries/guzzle.phar/autoloader.php';
-        }
-    }
-
     /**
      * @param Request $request
-     * @param Response $response
-     * @return \TYPO3\CMS\Core\Http\Message|Response
+     * @return Response
      * @throws \Exception
      */
-    public function proxyAction(Request $request, Response $response)
+    public function proxyAction(Request $request): Response
     {
         $params = $request->getQueryParams();
 
@@ -63,6 +54,8 @@ class ProxyController
             $uri,
             $options
         );
+
+        $response = new Response('php://temp', 200);
 
         if ($result->getStatusCode() === 304) {
             $response = $response->withStatus(304, 'Not Modified');

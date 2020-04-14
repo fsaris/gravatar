@@ -1,4 +1,5 @@
 <?php
+
 namespace MiniFranske\Gravatar\AvatarProvider;
 
 /*
@@ -13,9 +14,12 @@ namespace MiniFranske\Gravatar\AvatarProvider;
  *
  * The TYPO3 project - inspiring people to share!
  */
+
 use TYPO3\CMS\Backend\Backend\Avatar\Image;
 use TYPO3\CMS\Backend\Backend\Avatar\AvatarProviderInterface;
+use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -27,7 +31,12 @@ class GravatarProvider implements AvatarProviderInterface
     /**
      * @var array
      */
-    static protected $defaultConfiguration = ['fallback' => '', 'fallbackImageUrl' => '', 'forceProvider' => false];
+    static protected $defaultConfiguration = [
+        'fallback' => '',
+        'fallbackImageUrl' => '',
+        'forceProvider' => false,
+        'useProxy' => false,
+    ];
 
     /**
      * @var array
@@ -39,16 +48,21 @@ class GravatarProvider implements AvatarProviderInterface
      *
      * @return array
      */
-    protected static function getConfiguration()
+    protected static function getConfiguration(): array
     {
         if (self::$configuration === null) {
             // Extension Configuration
-            self::$configuration = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['gravatar']);
+            try {
+                self::$configuration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('gravatar');
+            } catch (\Exception $exception) {
+                // do nothing
+            }
 
             if (!is_array(self::$configuration) || empty(self::$configuration)) {
                 self::$configuration = self::$defaultConfiguration;
             }
         }
+
         return self::$configuration;
     }
 
@@ -58,8 +72,9 @@ class GravatarProvider implements AvatarProviderInterface
      * @param array $backendUser be_user record
      * @param int $size
      * @return Image|NULL
+     * @throws RouteNotFoundException
      */
-    public function getImage(array $backendUser, $size)
+    public function getImage(array $backendUser, $size): ?Image
     {
         $image = null;
         $configuration = self::getConfiguration();
@@ -78,7 +93,10 @@ class GravatarProvider implements AvatarProviderInterface
         if (!empty($configuration['useProxy'])) {
             // change to proxy url
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
-            $uri = (string)$uriBuilder->buildUriFromRoute('gravatar', ['md5' => $md5, 'size' => $size, 'd' => $fallback], UriBuilder::ABSOLUTE_URL);
+            $uri = (string)$uriBuilder->buildUriFromRoute(
+                'gravatar',
+                ['md5' => $md5, 'size' => $size, 'd' => $fallback],
+                UriBuilder::ABSOLUTE_URL);
         } else {
             $uri = 'https://www.gravatar.com/avatar/' . $md5 . '?s=' . $size . '&d=' . urlencode($fallback);
         }
