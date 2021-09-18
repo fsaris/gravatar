@@ -4,7 +4,7 @@
 	"description": "AvatarProvider for Gravatar support in TYPO3 backend",
 	"license": "GPL-2.0-or-later",
 	"require": {
-		"typo3/cms-core": "^10"
+		"typo3/cms-core": "^10 || ^11"
 	},
 	"replace": {
 		"typo3-ter/gravatar": "self.version"
