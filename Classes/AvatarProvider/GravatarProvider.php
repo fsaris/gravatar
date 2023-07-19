@@ -15,8 +15,8 @@ namespace MiniFranske\Gravatar\AvatarProvider;
  * The TYPO3 project - inspiring people to share!
  */
 
-use TYPO3\CMS\Backend\Backend\Avatar\Image;
 use TYPO3\CMS\Backend\Backend\Avatar\AvatarProviderInterface;
+use TYPO3\CMS\Backend\Backend\Avatar\Image;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -27,11 +27,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class GravatarProvider implements AvatarProviderInterface
 {
-
     /**
      * @var array
      */
-    static protected $defaultConfiguration = [
+    protected static $defaultConfiguration = [
         'fallback' => '',
         'fallbackImageUrl' => '',
         'forceProvider' => false,
@@ -41,7 +40,7 @@ class GravatarProvider implements AvatarProviderInterface
     /**
      * @var array
      */
-    static protected $configuration;
+    protected static $configuration;
 
     /**
      * Get Gravatar configuration
@@ -71,7 +70,7 @@ class GravatarProvider implements AvatarProviderInterface
      *
      * @param array $backendUser be_user record
      * @param int $size
-     * @return Image|NULL
+     * @return Image|null
      * @throws RouteNotFoundException
      */
     public function getImage(array $backendUser, $size): ?Image
@@ -96,7 +95,8 @@ class GravatarProvider implements AvatarProviderInterface
             $uri = (string)$uriBuilder->buildUriFromRoute(
                 'gravatar',
                 ['md5' => $md5, 'size' => $size, 'd' => $fallback],
-                UriBuilder::ABSOLUTE_URL);
+                UriBuilder::ABSOLUTE_URL
+            );
         } else {
             $uri = 'https://www.gravatar.com/avatar/' . $md5 . '?s=' . $size . '&d=' . urlencode($fallback);
         }
