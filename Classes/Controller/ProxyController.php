@@ -33,12 +33,12 @@ class ProxyController
     {
         $params = $request->getQueryParams();
 
-        if (!isset($params['md5'], $params['size'], $params['d'])) {
+        if (!isset($params['hash'], $params['size'], $params['d'])) {
             throw new \Exception('Missing gravatar parameters', 1470912686);
         }
 
         $uri = '/avatar/'
-            . urlencode($params['md5'])
+            . urlencode($params['hash'])
             . '?s=' . urlencode($params['size'])
             . '&d=' . urlencode($params['d']);
 

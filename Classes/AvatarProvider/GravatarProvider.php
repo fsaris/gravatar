@@ -87,18 +87,18 @@ class GravatarProvider implements AvatarProviderInterface
         }
 
         $size = min(2048, $size);
-        $md5 = md5(strtolower($backendUser['email'] ?: $backendUser['username']));
+        $hash = hash('sha256', strtolower($backendUser['email'] ?: $backendUser['username']));
 
         if (!empty($configuration['useProxy'])) {
             // change to proxy url
             $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
             $uri = (string)$uriBuilder->buildUriFromRoute(
                 'gravatar',
-                ['md5' => $md5, 'size' => $size, 'd' => $fallback],
+                ['hash' => $hash, 'size' => $size, 'd' => $fallback],
                 UriBuilder::ABSOLUTE_URL
             );
         } else {
-            $uri = 'https://www.gravatar.com/avatar/' . $md5 . '?s=' . $size . '&d=' . urlencode($fallback);
+            $uri = 'https://gravatar.com/avatar/' . $hash . '?s=' . $size . '&d=' . urlencode($fallback);
         }
 
         $image = GeneralUtility::makeInstance(
